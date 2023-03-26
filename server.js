@@ -3,6 +3,12 @@ const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
 const formatMessage = require("./utils/messages");
+const {
+  userJoin,
+  getCurrentUser,
+  userLeave,
+  getRoomUsers,
+} = require("./utils/users");
 
 const app = express();
 const server = http.createServer(app);
@@ -15,19 +21,33 @@ const botName = "Admin";
 
 //run when client connects
 io.on("connection", (socket) => {
-  socket.emit("message", formatMessage(botName,"Welcome to ChatQ"));
+  socket.on("joinRoom", ({ username, room }) => {
+    const user = userJoin(socket.id, username, room);
 
-  //wanneer een persoon verbindt
-  socket.broadcast.emit("message", formatMessage(botName, "A user has joined"));
+    socket.join(user.room);
 
-  //when client disconnect
+    //verwelkomt de user
+    socket.emit("message", formatMessage(botName, "Welcome to ChatQ"));
 
-  socket.on("disconnect", () => {
-    io.emit("message", formatMessage(botName, "A user has disconnected"));
+    //roept wanneer een persoon verbindt
+    socket.broadcast
+      .to(user.room)
+      .emit("message", formatMessage(botName, `${user.username} has joined`));
   });
+
   // Listen for chatMessages
   socket.on("chatMessage", (msg) => {
-    io.emit('message', formatMessage("USER", msg));
+    const user = getCurrentUser(socket.id);
+    io.to(user.room).emit("message", formatMessage(user.username, msg));
+  });
+
+  //when client disconnect
+  socket.on("disconnect", () => {
+    const user = userLeave(socket.id);
+
+    if(user){
+        io.to(user.room).emit("message", formatMessage(botName, `${user.username} has disconnected`));
+    }
   });
 });
 
