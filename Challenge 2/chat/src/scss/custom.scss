@@ -1,0 +1,69 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+@import "./footer.scss";
+@import "./desktop.scss";
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+@media screen and (max-width: 480px) {
+  .background {
+    background: #292929;
+    height: 1043px;
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+  }
+  .page-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .left, .hamburger {
+    flex: 1;
+  }
+  .page-nav-name p {
+    text-align: center;
+  }
+  p.h6.text-light.m-0 {
+    font-size: 16px;
+  }
+  .p-0 {
+    font-size: 11px;
+  }
+}
+.background {
+  margin: 0;
+  .page-nav {
+    background: #1f1f1f;
+    height: 109px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-bottom: 49px;
+  }
+  .hamburger {
+    width: 30px;
+  }
+  input.nickname {
+    background: #3c3c3c;
+    border-radius: 20px;
+    border: none;
+    width: 337px;
+    margin-left: 19px;
+    margin-right: 19px;
+    // margin-bottom: 76px;
+    color: white;
+    box-shadow: 2px 2px #1f1f1f80;
+    ::placeholder {
+      font-size: 15px;
+    }
+  }
+  .info-chat {
+    p {
+      color: #606060;
+      margin-top: 76px;
+      margin-left: 53px;
+      margin-right: 53px;
+      font-size: 15px;
+    }
+  }
+}
